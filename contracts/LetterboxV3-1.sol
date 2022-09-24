@@ -103,6 +103,8 @@ contract LetterboxV3 is RMRKMultiResource {
 
     //this function mints new letterboxes, much like new finder stamps
     //however, with no test for a charge
+
+    //NOTE: need to change the to_ address to be msg.sender or people could spam each other programmatically - want the owner to be the actual person who mints.
     function mintLetterbox(address to_, string memory uri_) public isNotPaused {
         uint256 newTokenId = mintInitial(to_, uri_);
         mapLetterboxAddr(to_, newTokenId);
@@ -110,6 +112,8 @@ contract LetterboxV3 is RMRKMultiResource {
         emit LetterboxCreated(newTokenId);
     }
 
+    //NOTE: Change stampUser parameter to be actually the msg.sender instead of a param so that people cannot programmatically stamp on behalf of others, to reduce spam.
+    //this is used as a param at present for cross-chain experimentation
     function stampToLetterbox(
         address stampUser,
         uint256 letterboxTokenId,
