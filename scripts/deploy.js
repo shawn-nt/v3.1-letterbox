@@ -16,6 +16,7 @@ async function main() {
   const Contract = await hre.ethers.getContractFactory("LetterboxV3");
   const contract = await Contract.deploy("LetterboxV3", "LTRBOXv3");
 
+
   await contract.deployed();
 
   console.log("Contract deployed to: ", contract.address);
