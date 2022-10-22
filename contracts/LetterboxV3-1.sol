@@ -37,26 +37,10 @@ contract LetterboxV3 is RMRKMultiResource {
     //
     //QR Code specific needs
     //
-    struct PendingLetterbox {
-        //the url is unique and will therefore also serve as a key value
-        string letterboxURL;
-        string letterboxName;
-        string letterboxMediaURI;
-        address letterboxCreator;
-    }
-    struct PendingURLs {
-        string[] pendingUrlsArray;
-    }
-
-    //makes it easy to retrieve a list of pending boxes for a user by wallet address
-    mapping(address => PendingURLs) internal pendingLetterboxUrlListToAddress;
-
-    //to retrieve a pending letterbox object easily by its URL
-    mapping(string => PendingLetterbox) internal pendingLetterboxToURL;
 
     //in order to make sure you can get token ID from a URL
 
-    mapping(string => uint256) public letterboxUrlToTokenId;
+    mapping(string => uint256) internal letterboxUrlToTokenId;
 
     //
     // Events --------
@@ -135,7 +119,6 @@ contract LetterboxV3 is RMRKMultiResource {
         string memory uri_
     ) public isNotPaused {
         uint256 newTokenId = mintInitial(to_, uri_);
-        // PendingLetterbox[] pending =  pendingLetterboxToAddress[to_];
 
         mapLetterboxAddr(to_, newTokenId);
         letterboxlist.push(newTokenId);
@@ -186,71 +169,6 @@ contract LetterboxV3 is RMRKMultiResource {
         // );
 
         return letterboxesToAddresses[owner].letterboxIds;
-    }
-
-    //this function is used to get the key information of name,
-    //uri for image, and url for qr code for a pending letterbox
-    //it returns a tuple of arrays
-    function getPendingLetterboxes(address owner)
-        public
-        view
-        returns (
-            string[] memory,
-            string[] memory,
-            string[] memory
-        )
-    {
-        string[] memory pendingLetterboxURLs = pendingLetterboxUrlListToAddress[
-            owner
-        ].pendingUrlsArray;
-        PendingLetterbox memory pending;
-        string[] memory pendingLetterboxNames;
-        string[] memory pendingLetterboxMediaURIs;
-        for (uint i = 0; i < pendingLetterboxURLs.length; i++) {
-            pending = pendingLetterboxToURL[pendingLetterboxURLs[i]];
-            pendingLetterboxNames[i] = pending.letterboxName;
-            pendingLetterboxMediaURIs[i] = pending.letterboxMediaURI;
-        }
-        return (
-            pendingLetterboxNames,
-            pendingLetterboxURLs,
-            pendingLetterboxMediaURIs
-        );
-    }
-
-    function createPendingLetterbox(
-        string memory name,
-        string memory url,
-        string memory mediaURI
-    ) public returns (string memory) {
-        //make the pending object
-        PendingLetterbox memory newPending;
-        newPending.letterboxURL = url;
-        newPending.letterboxName = name;
-        newPending.letterboxMediaURI = mediaURI;
-        newPending.letterboxCreator = msg.sender;
-
-        //map the object to its URL
-        pendingLetterboxToURL[url] = newPending;
-
-        //add to or make new pendingURLs object
-        // if (
-        //     pendingLetterboxUrlListToAddress[msg.sender]
-        //         .pendingUrlsArray
-        //         .length > 0
-        // ) {
-        //     pendingLetterboxUrlListToAddress[msg.sender].pendingUrlsArray.push(
-        //         url
-        //     );
-        // } else {
-        //     PendingURLs memory newPendingURL;
-        //     newPendingURL.pendingUrlsArray[0] = url;
-        //     pendingLetterboxUrlListToAddress[msg.sender] = newPendingURL;
-        // }
-        PendingURLs memory newPendingURL;
-        newPendingURL.pendingUrlsArray[0] = url;
-        pendingLetterboxUrlListToAddress[msg.sender] = newPendingURL;
-        return name;
     }
 
     function getLetterboxFromURL(string memory url)

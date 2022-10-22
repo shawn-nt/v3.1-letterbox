@@ -21,7 +21,30 @@ async function main() {
 
   console.log("Contract deployed to: ", contract.address);
   
+  
+  // let tx = await contract.mintLetterbox(
+  //   "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC", // msg.sender
+  //   "https://URLofLetterbox.com",
+  //   "https://narrativetrails.xyz/letterboxURI/16", // what you got from Fleek.
+  // );
+  // console.log("minting letterbox...");
+  // let receipt = await tx.wait();
+  // let event = receipt.events.find(x => x.event === "LetterboxCreated");
 
+  // console.log("letterbox token id: ", event.args.tokenId.toString());
+
+
+  // tx = await contract.mintStamp("0x70997970C51812dc3A010C7d01b50e0d17dc79C8", "https://THISisAstamp/stamp.json");
+  // receipt = await tx.wait();
+  // event = receipt.events.find(x=> x.event === "StampCreated");
+  // console.log("stamp token id: ", event.args.tokenId.toString() );
+
+  
+  // const result = await contract.getLetterboxFromURL("https://URLofLetterbox.com");
+  // const {0: tokenMetadataURL, 1: tokenIdFromURL} = result;
+
+  // console.log("letterbox id from url: ", tokenIdFromURL.toString());
+  // console.log("letterbox URI from URL: ", tokenMetadataURL);
 
 };
   
