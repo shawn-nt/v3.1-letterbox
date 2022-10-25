@@ -42,6 +42,8 @@ contract LetterboxV3 is RMRKMultiResource {
 
     mapping(string => uint256) internal letterboxUrlToTokenId;
 
+    //this is so that you can have a list of just all the hashs for letterboxes
+    string[] letterboxURLlist;
     //
     // Events --------
     //
@@ -123,6 +125,7 @@ contract LetterboxV3 is RMRKMultiResource {
         mapLetterboxAddr(to_, newTokenId);
         letterboxlist.push(newTokenId);
         letterboxUrlToTokenId[url_] = newTokenId;
+        letterboxURLlist.push(url_);
         emit LetterboxCreated(newTokenId);
     }
 
@@ -148,7 +151,7 @@ contract LetterboxV3 is RMRKMultiResource {
     {
         //should add custom data for letterboxer to choose autoaccept
         string memory letterboxMetadata;
-        (letterboxMetadata, ) = letterboxMetadataURI(letterboxTokenId);
+        letterboxMetadata = letterboxMetadataURI(letterboxTokenId);
         uint256 stampReceiving = stampHeldBy(stampUser);
         createAndAddResource(stampReceiving, letterboxMetadata, true);
         emit LetterboxCollected();
@@ -174,10 +177,10 @@ contract LetterboxV3 is RMRKMultiResource {
     function getLetterboxFromURL(string memory url)
         public
         view
-        returns (string memory, uint64)
+        returns (string memory, uint256)
     {
         uint256 tokenId = letterboxUrlToTokenId[url];
-        return letterboxMetadataURI(tokenId);
+        return (letterboxMetadataURI(tokenId), tokenId);
     }
 
     function stampHeldBy(address owner) public view returns (uint256) {
@@ -186,6 +189,10 @@ contract LetterboxV3 is RMRKMultiResource {
 
     function letterboxList() public view returns (uint256[] memory) {
         return letterboxlist;
+    }
+
+    function letterboxUrlList() public view returns (string[] memory) {
+        return letterboxURLlist;
     }
 
     //should this be a modifier instead of a function??
@@ -216,7 +223,7 @@ contract LetterboxV3 is RMRKMultiResource {
     function letterboxMetadataURI(uint256 letterboxTokenId)
         public
         view
-        returns (string memory, uint64)
+        returns (string memory)
     {
         //ATTENTION add try catch
 
@@ -228,7 +235,8 @@ contract LetterboxV3 is RMRKMultiResource {
             letterbox.metadataURI,
             letterbox.id
         );
-        return (metadata, id);
+        //used to return duple of metadata + resouce id.. removed resource id from return due to changes 10/23
+        return metadata;
     }
 
     function resourceCount(uint256 tokenId_) public view returns (uint256) {
