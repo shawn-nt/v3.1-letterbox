@@ -1,13 +1,4 @@
-# Sample Hardhat Project
+Our demo site can be viewed here: https://neon-scone-9b7ad1.netlify.app/
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+The github repo for our front-end is here: https://github.com/ThomasDang93/Narrative-Trails
 
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-GAS_REPORT=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
-```
